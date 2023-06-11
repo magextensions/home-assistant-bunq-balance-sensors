@@ -28,7 +28,8 @@ class BunqData:
                 sensor.load_transactions(transactions)
                 tasks.append(sensor.async_update_ha_state())
         if tasks:
-            await asyncio.wait(tasks)
+            task_objs = [asyncio.create_task(task) for task in tasks]
+done, pending = await asyncio.wait(task_objs)
 
     async def schedule_update(self, update_interval):
         """Schedule an update."""
